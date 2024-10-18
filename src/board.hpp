@@ -7,14 +7,14 @@ template <std::size_t I, std::size_t J, std::size_t N = 0> struct Board;
 
 template <std::size_t I, std::size_t J, std::size_t N> struct GetNeighborCount {
   static constexpr auto neighborCount =
-      static_cast<std::size_t>(Board<I + 1, J, N>::isAlive) +
+      static_cast<std::size_t>(Board<I - 1, J - 1, N>::isAlive) +
+      static_cast<std::size_t>(Board<I - 1, J + 1, N>::isAlive) +
+      static_cast<std::size_t>(Board<I - 1, J, N>::isAlive) +
+      static_cast<std::size_t>(Board<I + 1, J - 1, N>::isAlive) +
       static_cast<std::size_t>(Board<I + 1, J + 1, N>::isAlive) +
-      static_cast<std::size_t>(Board<I, J + 1, N>::isAlive) +
       static_cast<std::size_t>(Board<I + 1, J, N>::isAlive) +
       static_cast<std::size_t>(Board<I, J - 1, N>::isAlive) +
-      static_cast<std::size_t>(Board<I - 1, J, N>::isAlive) +
-      static_cast<std::size_t>(Board<I - 1, J, N>::isAlive) +
-      static_cast<std::size_t>(Board<I - 1, J - 1, N>::isAlive);
+      static_cast<std::size_t>(Board<I, J + 1, N>::isAlive);
 };
 // dead rule
 template <std::size_t I, std::size_t J, std::size_t N, bool isAlive>
