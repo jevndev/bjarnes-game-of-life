@@ -16,7 +16,6 @@ template <std::size_t Epoch> void printBoard() {
             << getBlock(Board<2, 0, Epoch>::isAlive) << "\n";
 }
 
-int main(int argc, char const *argv[]) { printBoard<2>(); }
 
 template <std::size_t Epoch> void printBoards() {
   printBoards<Epoch - 1>();
@@ -24,3 +23,5 @@ template <std::size_t Epoch> void printBoards() {
 }
 
 template <> void printBoards<0>() { printBoard<0>(); }
+
+int main(int argc, char const *argv[]) { printBoards<3>(); }
