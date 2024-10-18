@@ -17,3 +17,10 @@ template <std::size_t Epoch> void printBoard() {
 }
 
 int main(int argc, char const *argv[]) { printBoard<2>(); }
+
+template <std::size_t Epoch> void printBoards() {
+  printBoards<Epoch - 1>();
+  printBoard<Epoch>();
+}
+
+template <> void printBoards<0>() { printBoard<0>(); }
