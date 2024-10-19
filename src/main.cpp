@@ -4,17 +4,16 @@
 
 // Board definition
 
-template <> struct Board<0, 1, 0> {
-  static constexpr auto isAlive = true;
-};
+#define SEED_CELL(Epoch, Width, Height)                                        \
+  template <> struct Board<Epoch, Width, Height> {                             \
+    static constexpr auto isAlive = true;                                      \
+  }
 
-template <> struct Board<1, 1, 0> {
-  static constexpr auto isAlive = true;
-};
-
-template <> struct Board<2, 1, 0> {
-  static constexpr auto isAlive = true;
-};
+SEED_CELL(0, 1, 0);
+SEED_CELL(1, 2, 0);
+SEED_CELL(2, 0, 0);
+SEED_CELL(2, 1, 0);
+SEED_CELL(2, 2, 0);
 
 char getBlock(const bool value) { return value ? 'x' : ' '; }
 
@@ -56,6 +55,7 @@ template <std::size_t Epochs, std::size_t Width, std::size_t Height>
 struct PrintBoardsImpl {
   void operator()() {
     PrintBoardsImpl<Epochs - 1, Width, Height>()();
+    printf("----------\n");
     printBoard<Epochs, Width, Height>();
   }
 };
@@ -69,4 +69,4 @@ template <std::size_t Epochs, std::size_t Width, std::size_t Height>
 void printBoards() {
   PrintBoardsImpl<Epochs, Width, Height>()();
 }
-int main(int argc, char const *argv[]) { printBoards<3, 2, 2>(); }
+int main(int argc, char const *argv[]) { printBoards<32, 10, 10>(); }
