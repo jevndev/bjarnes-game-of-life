@@ -1,6 +1,7 @@
 #include "board.hpp"
 
-#include <iostream>
+#include <cstdio>
+
 // Board definition
 
 template <> struct Board<0, 1, 0> {
@@ -17,24 +18,38 @@ template <> struct Board<2, 1, 0> {
 
 char getBlock(const bool value) { return value ? 'x' : ' '; }
 
-template <std::size_t Epoch> void printBoard() {
-  std::cout << getBlock(Board<0, 2, Epoch>::isAlive)
-            << getBlock(Board<1, 2, Epoch>::isAlive)
-            << getBlock(Board<2, 2, Epoch>::isAlive) << "\n"
-            << getBlock(Board<0, 1, Epoch>::isAlive)
-            << getBlock(Board<1, 1, Epoch>::isAlive)
-            << getBlock(Board<2, 1, Epoch>::isAlive) << "\n"
-            << getBlock(Board<0, 0, Epoch>::isAlive)
-            << getBlock(Board<1, 0, Epoch>::isAlive)
-            << getBlock(Board<2, 0, Epoch>::isAlive) << "\n";
+template <std::size_t Epoch, std::size_t Width, std::size_t Height>
+void printBlock() {
+  putchar(getBlock(Board<Width, Height, Epoch>::isAlive));
 }
 
+template <std::size_t Epoch, std::size_t Width, std::size_t Height,
+          std::size_t TotalWidth>
+struct PrintBoardImpl {
+  void operator()() const {
+    PrintBoardImpl<Epoch, Width - 1, Height, TotalWidth>()();
+    printBlock<Epoch, Width, Height>();
+  }
+};
 
-template <std::size_t Epoch> void printBoards() {
-  printBoards<Epoch - 1>();
-  printBoard<Epoch>();
+template <std::size_t Epoch, std::size_t Height, std::size_t TotalWidth>
+struct PrintBoardImpl<Epoch, 0, Height, TotalWidth> {
+  void operator()() const {
+    PrintBoardImpl<Epoch, TotalWidth, Height - 1, TotalWidth>()();
+    putchar('\n');
+    printBlock<Epoch, 0, Height>();
+  }
+};
+
+template <std::size_t Epoch, std::size_t TotalWidth>
+struct PrintBoardImpl<Epoch, 0, 0, TotalWidth> {
+  void operator()() const { printBlock<Epoch, 0, 0>(); }
+};
+
+template <std::size_t Epoch, std::size_t Width, std::size_t Height>
+void printBoard() {
+  PrintBoardImpl<Epoch, Width, Height, Width>()();
+  putchar('\n');
 }
 
-template <> void printBoards<0>() { printBoard<0>(); }
-
-int main(int argc, char const *argv[]) { printBoards<3>(); }
+int main(int argc, char const *argv[]) { printBoard<0, 2, 2>(); }
