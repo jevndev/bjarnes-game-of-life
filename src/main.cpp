@@ -52,4 +52,21 @@ void printBoard() {
   putchar('\n');
 }
 
-int main(int argc, char const *argv[]) { printBoard<0, 2, 2>(); }
+template <std::size_t Epochs, std::size_t Width, std::size_t Height>
+struct PrintBoardsImpl {
+  void operator()() {
+    PrintBoardsImpl<Epochs - 1, Width, Height>()();
+    printBoard<Epochs, Width, Height>();
+  }
+};
+
+template <std::size_t Width, std::size_t Height>
+struct PrintBoardsImpl<0, Width, Height> {
+  void operator()() { printBoard<0, Width, Height>(); }
+};
+
+template <std::size_t Epochs, std::size_t Width, std::size_t Height>
+void printBoards() {
+  PrintBoardsImpl<Epochs, Width, Height>()();
+}
+int main(int argc, char const *argv[]) { printBoards<3, 2, 2>(); }
