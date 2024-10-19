@@ -43,17 +43,3 @@ template <std::size_t I, std::size_t J, std::size_t N> struct Board {
 template <std::size_t I, std::size_t J> struct Board<I, J, 0> {
   static constexpr auto isAlive = false;
 };
-
-// Board definition
-
-template <> struct Board<0, 1, 0> {
-  static constexpr auto isAlive = true;
-};
-
-template <> struct Board<1, 1, 0> {
-  static constexpr auto isAlive = true;
-};
-
-template <> struct Board<2, 1, 0> {
-  static constexpr auto isAlive = true;
-};
