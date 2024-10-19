@@ -1,6 +1,19 @@
 #include "board.hpp"
 
 #include <iostream>
+// Board definition
+
+template <> struct Board<0, 1, 0> {
+  static constexpr auto isAlive = true;
+};
+
+template <> struct Board<1, 1, 0> {
+  static constexpr auto isAlive = true;
+};
+
+template <> struct Board<2, 1, 0> {
+  static constexpr auto isAlive = true;
+};
 
 char getBlock(const bool value) { return value ? 'x' : ' '; }
 
